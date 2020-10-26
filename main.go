@@ -34,8 +34,8 @@ func main() {
 			log.Fatal(err)
 		}
 
-		transData.LoadAmount = transData.LoadAmount[1:]
-		transData.Time = transData.Time[0:10]
+		transData.LoadAmount = transData.LoadAmount[1:] // remove dollar sign
+		transData.Time = transData.Time[0:10] // Strip time from date
 		if week.shouldStartNewWeek(transData.Time) {
 			week.reset()
 			transactions.reset()
