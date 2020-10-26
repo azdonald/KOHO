@@ -78,6 +78,7 @@ func (t *Transactions) add(ld LoadData) Result {
 	tranx := transaction{id: ld.ID, amount: amount}
 
 	if !ok {
+		// No transaction has happened on this day
 		ut.addTransaction(tranx)
 		t.weekly[ld.Time] = make(map[string]userTransaction)
 		t.updateUserTransaction(ut, ld)
@@ -86,10 +87,12 @@ func (t *Transactions) add(ld LoadData) Result {
 
 	userTranx, ok := customerID[ld.CustomerID]
 	if !ok {
+		// Customer hasn't made a transaction for the day
 		ut.addTransaction(tranx)
 		t.updateUserTransaction(ut, ld)
 		return transactionResult(ld, true)
 	}
+
 	if userTranx.hasReachedDailyLimit(amount) || userTranx.isDuplicateTransaction(ld.ID) {
 		return transactionResult(ld, false)
 	}
